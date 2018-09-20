@@ -1,0 +1,360 @@
+﻿<Window x:Class="JPKFVHurt.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:jpk="clr-namespace:JPKFVHurt"
+        Background="#FFF4F4F4"
+        mc:Ignorable="d"
+        Title="JPK_FV HURT" Height="404.4" Width="625" Closing="Window_Closing" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <Style x:Name="ButtonStyle" TargetType="{x:Type Button}" >
+            <Setter Property="Background" Value="#FFE4E4E4"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="Width" Value="79"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger  Property="IsEnabled" Value="False">
+                    <Setter Property="Foreground" Value="Gray"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#FFADEE80"/>
+                    <Setter Property="Foreground" Value="Black"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#FFADEE80"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Name="LabelStyle" TargetType="Label">
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+        </Style>
+        <Style x:Name="DatePickerStyle" TargetType="DatePicker">
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="Width" Value="109"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="FirstDayOfWeek" Value="Monday"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Background" Value="Transparent"/>
+        </Style>
+        <Style x:Name="ComboBoxStyle" TargetType="ComboBox">
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Height" Value="23"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="Width" Value="120"/>
+        </Style>
+        <Style x:Name="ScrollViewerStyle" TargetType="ScrollViewer">
+            <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+        </Style>
+        <Style x:Name="DataGridStyle" TargetType="DataGrid">
+            <Setter Property="IsSynchronizedWithCurrentItem" Value="True"/>
+            <Setter Property="Background" Value="#FFC7C7C7"/>
+            <Setter Property="ItemsSource" Value="{Binding Mode=OneWay}"/>
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+        </Style>
+        <Style x:Name="GridStyle" TargetType="Grid">
+            <Setter Property="Background" Value="#FFF4F4F4"/>
+        </Style>
+
+    </Window.Resources>
+    <Grid Margin="0,0,0,0">
+        <StatusBar x:Name="statusBar"
+                   Height="30"
+                   VerticalAlignment="Bottom"
+                   Margin="0,0,0,0">
+            <Label x:Name="lsb"
+                   Height="26" />
+        </StatusBar>
+        <TabControl x:Name="TabFA"
+                            Margin="0,20,0,30">
+            <TabItem x:Name="ogolne"
+                             Header="Ogólne">
+                <Grid>
+                    <Border Margin="5,33,0,0"
+                            Height="150"
+                            Width="500"
+                            Background = "#FFC7C7C7"
+                            HorizontalAlignment ="Left"
+                            VerticalAlignment ="Top"
+                            BorderThickness ="2"
+                            BorderBrush ="Black"/>
+                    <Label x:Name="label101"
+                                   Margin="87,35,0,0"
+                                   Content="Okres:"/>
+                    <Label x:Name="label1"
+                                   Margin="125,50,0,0"
+                                   Content="Od:"/>
+                    <DatePicker x:Name="Dp_dateFrom"
+                                        Margin="154,48,0,0"
+                                SelectedDateChanged="Dp_dateFrom_SelectedDateChanged"/>
+                    <Label x:Name="label2"
+                                   Margin="263,50,0,0"
+                                   Content="Do:"/>
+                    <DatePicker x:Name="Dp_dateTo"
+                                        Margin="291,48,0,0"
+                                        Grid.ColumnSpan="3" SelectedDateChanged="Dp_dateTo_SelectedDateChanged"/>
+                    <Label x:Name="label6"
+                                   Content="Data utworzenia:" 
+                                   Margin="32,85,0,0"/>
+                    <DatePicker x:Name="Dp_dateCr"
+                                        Margin="133,85,0,0"/>
+                    <Label x:Name="label7"
+                                   Content="Domyślny kod waluty:" 
+                                   Margin="5,121,0,0"/>
+                    <ComboBox x:Name="Cb_waluta"
+                                      Margin="133,122,0,0"/>
+                    <Label x:Name="label8"
+                                   Content="Kod urzędu:" 
+                                   Margin="58,148,0,0"/>
+                    <StackPanel>
+                        <StackPanel.Resources>
+                            <ResourceDictionary Source="/JPKFVHurt;component/Styles/AutoComplete.Styles.xaml" />
+                        </StackPanel.Resources>
+                        <jpk:cb_AutoComplete x:Name="Cb_kodUrzedu" 
+                                             SelectedValuePath="KodUS" 
+                                             DisplayMemberPath="Nazwa"               
+                                             PatternChanged="Cb_kodUrzedu_PatternChanged" 
+                                             Width="334"
+                                             Style="{StaticResource AutoCompleteComboBox}"
+                                             Delay="500"
+                                             HorizontalAlignment="Left"
+                                             Margin="133,150,0,0"/>
+                    </StackPanel>
+                    <Button x:Name="B_create"
+                            Margin="5,199,0,0"
+                            Content="Generuj JPK FA" 
+                            Click="B_create_Click" Width="100"/>
+                    <Label x:Name="label3" 
+                                   Content="Kod formularza:" 
+                                   Margin="5,5,0,0"/>
+                    <Label x:Name="l_kodForm"
+                                   Height="29" 
+                                   Margin="97,5,0,0" 
+                                   Content="JPK_FA (1)"
+                                   Width="85"/>
+                    <Label x:Name="label4" 
+                                   Content="Wariant formularza:" 
+                                   Margin="203,5,0,0"/>
+                    <Label x:Name="l_warForm" 
+                                   Height="29" 
+                                   Margin="322,5,0,0" 
+                                   Content="1-0"                               
+                                   Width="34"/>
+                    <Label x:Name="label5" 
+                                   Content="Cel złożenia:"
+                                   Margin="361,5,0,0"/>
+                    <ComboBox x:Name="Cb_cel"
+                              Height="23"
+                              Margin="442,5,0,0" Width="120" 
+                              />
+                    <ProgressBar x:Name="progressBar"
+                                         Height="26"
+                                         Background="Transparent"
+                                         VerticalAlignment="Bottom"
+                                         BorderBrush="Transparent"/>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="danepodatnika" 
+                     Header="Dane podatnika" 
+                     Height="22" 
+                     VerticalAlignment="Top">
+                <Grid x:Name="grid_danepodatnika">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="21*"/>
+                        <ColumnDefinition Width="590*"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Margin="5,5,0,0"
+                            Background = "#FFC7C7C7"
+                            HorizontalAlignment ="Left"
+                            VerticalAlignment ="Top"
+                            BorderThickness ="2"
+                            BorderBrush ="Black"
+                            Height="57" 
+                            Width="584" Grid.ColumnSpan="2"/>
+                    <Label x:Name="label"
+                           Margin="10,10,0,0"
+                           Content="Pełna nazwa:" Grid.ColumnSpan="2"/>
+                    <TextBox x:Name="tb_fullName"
+                             Height="23"
+                             HorizontalAlignment="Left"
+                             TextWrapping="Wrap"
+                             VerticalAlignment="Top"
+                             Margin="68.521,10,0,0"
+                             Width="494" Grid.Column="1" />
+                    <Label x:Name="label9"
+                           Margin="10,33,0,0"
+                           Content="NIP:" Grid.ColumnSpan="2"/>
+                    <Label x:Name="Tb_NIP"
+                             Margin="16.521,35,0,0"
+                             Content="0123456789"
+                           Background="#FFE7E7E7"
+                             IsEnabled="False"
+                             Height="23"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Top"
+                             Width="120" Grid.Column="1" />
+                    <Label x:Name="label10"
+                           Content="REGON:"
+                           Margin="178.521,33,0,0" Grid.Column="1"/>
+                    <TextBox x:Name="Tb_REGON"
+                             Height="23"
+                             HorizontalAlignment="Left"
+                             TextWrapping="Wrap"
+                             VerticalAlignment="Top"
+                             Margin="238.521,35,0,0"
+                             Width="120" 
+                             LostFocus="Tb_REGON_LostFocus" Grid.Column="1"/>
+                    <Label x:Name="label11"
+                           Content="Adres:"
+                           Margin="10,67,0,0" Grid.ColumnSpan="2"/>
+                    <Border Margin="5,94,0,0"
+                            Height="190"
+                            Background = "#FFC7C7C7"
+                            HorizontalAlignment ="Left"
+                            VerticalAlignment ="Top"
+                            BorderThickness ="2"
+                            BorderBrush ="Black"
+                            Width="584" Grid.ColumnSpan="2"/>
+                    <Label x:Name="label12"
+                           Content="Ulica:"
+                           Margin="10,99,0,0" Grid.ColumnSpan="2"/>
+                    <TextBox x:Name="tb_ulica" 
+                             Margin="34.521,99,0,0"
+                             Height="23"
+                             HorizontalAlignment="Left"
+                             TextWrapping="Wrap"
+                             VerticalAlignment="Top"
+                             Width="300" Grid.Column="1" />
+                    <TextBox x:Name="tb_nrDom"
+                             Width="40"
+                             Height="23"
+                             HorizontalAlignment="Left"
+                             TextWrapping="Wrap"
+                             VerticalAlignment="Top"
+                             Margin="340.521,99,0,0"
+                             TextAlignment="Center" Grid.Column="1" />
+                    <Label x:Name="label14"
+                           Content="/"
+                           Margin="381.521,99,0,0" Grid.Column="1"/>
+                    <TextBox x:Name="tb_nrLok"
+                             Width="40"
+                             Height="23"
+                             HorizontalAlignment="Left"
+                             TextWrapping="Wrap"
+                             VerticalAlignment="Top"
+                             Margin="398.521,99,0,0"
+                             TextAlignment="Center" Grid.Column="1"/>
+                    <Label x:Name="label15"
+                           Content="Kod pocztowy:" 
+                           Margin="10,123,0,0" Grid.ColumnSpan="2"/>
+                    <TextBox x:Name="tb_kodP1"
+                             Width="30"
+                             Height="23"
+                             HorizontalAlignment="Left"
+                             TextWrapping="Wrap"
+                             VerticalAlignment="Top"
+                             Margin="85.521,124,0,0"
+                             TextAlignment="Center"
+                             MaxLength="2" Grid.Column="1"/>
+                    <Label x:Name="label21"
+                           Content="-"
+                           Margin="114.521,121,0,0" Grid.Column="1"/>
+                    <TextBox x:Name="tb_kodP2"
+                             Width="30"
+                             Height="23"
+                             HorizontalAlignment="Left"
+                             TextWrapping="Wrap"
+                             VerticalAlignment="Top"
+                             Margin="128.521,124,0,0"
+                             TextAlignment="Center"
+                             MaxLength="3" Grid.Column="1"/>
+                    <Label x:Name="label16"
+                           Content="Miejscowość:"
+                           Margin="173.521,123,0,0" Grid.Column="1"/>
+                    <TextBox x:Name="tb_city"
+                             Height="23"
+                             HorizontalAlignment="Left"
+                             TextWrapping="Wrap"
+                             VerticalAlignment="Top"
+                             Width="151"
+                             Margin="262.521,124,0,0" Grid.Column="1"/>
+                    <Label x:Name="label17"
+                           Content="Poczta:"
+                           Margin="10,148,0,0"
+                           Height="26" Grid.ColumnSpan="2"/>
+                    <TextBox x:Name="tb_poczta" 
+                             Width="151"
+                             Height="23"
+                             HorizontalAlignment="Left"
+                             TextWrapping="Wrap"
+                             VerticalAlignment="Top"
+                             Margin="78.521,149,0,0" Grid.Column="1"/>
+                    <Label x:Name="label18" 
+                           Content="Gmina:"
+                           Margin="10,173,0,0" Grid.ColumnSpan="2"/>
+                    <TextBox x:Name="tb_gmina"
+                             Width="151"
+                             Height="23"
+                             HorizontalAlignment="Left"
+                             TextWrapping="Wrap"
+                             VerticalAlignment="Top"
+                             Margin="78.521,174,0,0" Grid.Column="1"/>
+                    <Label x:Name="label19" 
+                           Margin="10,198,0,0"
+                           Content="Powiat:" Grid.ColumnSpan="2"/>
+                    <TextBox x:Name="tb_powiat" 
+                             Height="23"
+                             HorizontalAlignment="Left"
+                             TextWrapping="Wrap"
+                             VerticalAlignment="Top"
+                             Width="151"
+                             Margin="78.521,199,0,0" Grid.Column="1"/>
+                    <Label x:Name="label20"
+                           Content="Województwo:"
+                           Margin="10,223,0,0" Grid.ColumnSpan="2"/>
+                    <StackPanel Grid.ColumnSpan="2">
+                        <StackPanel.Resources>
+                            <ResourceDictionary Source="/JPKFVHurt;component/Styles/AutoComplete.Styles.xaml" />
+                        </StackPanel.Resources>
+                        <jpk:cb_AutoComplete x:Name="Cb_woj" 
+                                             SelectedValuePath="Nazwa" 
+                                             DisplayMemberPath="Nazwa" 
+                                             PatternChanged="Cb_woj_PatternChanged" 
+                                             Width="151"
+                                             Style="{StaticResource AutoCompleteComboBox}"
+                                             Delay="500"
+                                             Height="23"
+                                             VerticalAlignment="Top"
+                                             HorizontalAlignment="Left"
+                                             Margin="100,224,0,0"/>
+                    </StackPanel>
+                    <Label x:Name="label22" 
+                           Margin="10,248,0,0" 
+                           Content="Kod kraju:" Grid.ColumnSpan="2"/>
+                    <ComboBox x:Name="Cb_country" 
+                              IsEnabled="False" 
+                              Width="151" 
+                              Margin="79.521,249,0,0" Grid.Column="1"/>
+                    <Button x:Name="B_saveCompData"
+                            Width="100"
+                            Content="Zapisz"
+                            VerticalAlignment="Top"
+                            Click="B_saveCompData_Click"
+                            Margin="455.521,244,0,0" Grid.Column="1"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
